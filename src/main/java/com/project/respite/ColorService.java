@@ -19,6 +19,8 @@ package com.project.respite;
 import static javax.ejb.LockType.*;
 import static javax.ws.rs.core.MediaType.*;
 
+import java.util.ArrayList;
+
 import javax.ejb.Lock;
 import javax.ejb.Singleton;
 import javax.ws.rs.GET;
@@ -26,6 +28,9 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Lock(READ)
 @Singleton
@@ -53,7 +58,28 @@ public class ColorService {
     @Path("object")
     @GET
     @Produces({APPLICATION_JSON})
-    public Color getColorObject() {
+    public Color getColorObject() throws JsonProcessingException {
+
+    	ObjectMapper mapper = new ObjectMapper();
+
+    	Foo foo1 = new Foo();
+    	foo1.setId("foo1");
+    	foo1.setBars(null);
+
+    	Foo foo2 = new Foo();
+    	foo2.setId("foo2");
+    	//foo2.setBars(Collections.emptyList());
+
+    	Foo foo3 = new Foo();
+    	foo3.setId("foo3");
+    	ArrayList list = new ArrayList();
+    	list.add(new Bar("bar1", "name"));
+    	foo3.setBars(list);
+
+        System.out.println(mapper.writeValueAsString(foo1));
+        System.out.println(mapper.writeValueAsString(foo2));
+        System.out.println(mapper.writeValueAsString(foo3));
+
         return new Color("orange", 0xE7, 0x71, 0x00);
     }
 }
